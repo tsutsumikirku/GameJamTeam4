@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     private bool isGamePaused; // ゲームが一時停止しているかどうかを管理する変数
     private int playerOneScore; // プレイヤーのスコアを管理する変数
     private int playerTwoScore; // プレイヤーのスコアを管理する変数
+    private IPauseResume[] pauseResumeObjects;
     // ゲームのデータを管理する変数
     #endregion
 
@@ -68,11 +70,25 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         isGamePaused = true;
-        
+        pauseResumeObjects = Array.ConvertAll(FindObjectsByType<GameObject>(FindObjectsSortMode.None), obj => obj.GetComponent<IPauseResume>());
+        foreach (var item in pauseResumeObjects)
+        {
+            if (item != null)
+            {
+                item.Pause();
+            }
+        }
     }
     public void ResumeGame()
     {
         isGamePaused = false;
+        foreach (var item in pauseResumeObjects)
+        {
+            if (item != null)
+            {
+                item.Resume();
+            }
+        }
     }
     #endregion
 
