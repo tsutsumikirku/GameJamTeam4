@@ -64,6 +64,18 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region ゲームの一時停止と再開
+    public void PauseGame()
+    {
+        isGamePaused = true;
+        
+    }
+    public void ResumeGame()
+    {
+        isGamePaused = false;
+    }
+    #endregion
+
     #region シングルトンの実装
     // シングルトンの実装
     private void Awake()
