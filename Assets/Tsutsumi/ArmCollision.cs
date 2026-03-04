@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ArmCollision : MonoBehaviour
@@ -12,9 +13,11 @@ public class ArmCollision : MonoBehaviour
         cachedRb = GetComponentInParent<Rigidbody2D>();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D other) 
     {
-        if(collision.gameObject.CompareTag("Floor"))
+        
+        Debug.Log("ArmCollision: 衝突検出 - " + other.gameObject.name);
+        if(other.gameObject.tag == "Floor")
         {
             if(normalCrane != null)
                 normalCrane.OnArmEnd();
@@ -24,12 +27,12 @@ public class ArmCollision : MonoBehaviour
         }
 
         // Floor 以外との衝突で一定以上の力があればアーム終了
-        float otherMass = collision.rigidbody != null ? collision.rigidbody.mass : 0f;
+        float otherMass = other.rigidbody != null ? other.rigidbody.mass : 0f;
         float selfMass = cachedRb != null ? cachedRb.mass : 0f;
         float combinedMass = selfMass + otherMass;
         if (combinedMass <= 0f)
             combinedMass = 1f;
-        float impact = collision.relativeVelocity.magnitude * combinedMass;
+        float impact = other.relativeVelocity.magnitude * combinedMass;
         if (impact >= impactThreshold)
         {
             if(normalCrane != null) normalCrane.OnArmEnd();

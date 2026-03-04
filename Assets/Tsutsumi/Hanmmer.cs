@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class Hanmmer : MonoBehaviour, IClaneArm
 {
+    [SerializeField]
+    private bool isRight = true;
+    [SerializeField]
+    private HannmerBom hannmerBom; // ハンマーボムの参照
     [SerializeField] 
     private Rigidbody2D rb;
     [SerializeField] 
@@ -13,7 +17,7 @@ public class Hanmmer : MonoBehaviour, IClaneArm
     [SerializeField]
     private float hanmmerSpeed = 5f; // ハンマーの下降スピード
     [SerializeField] 
-    private float hannmerUpSpeed = 5f; // ハンマーの上昇スピード
+    private float hannmerUpSpeed = 5f;
     public Action OnArmActionEnd { get; set; }
     public Action OnArmReleaseEnd { get; set; }
     private Vector2 startPosition;
@@ -49,6 +53,13 @@ public class Hanmmer : MonoBehaviour, IClaneArm
     {
         OnArmStartAsync().Forget();
     }
+    private async UniTask OnExplosion()
+    {
+        await UniTask.WaitForSeconds((1f / power) / 2);
+        hannmerBom.IsActive = true;
+        await UniTask.WaitForSeconds((1f / power) / 3);
+        hannmerBom.IsActive = false;
+    }
     private async UniTask OnArmStartAsync()
     {
         isArmClose = true;
@@ -59,8 +70,9 @@ public class Hanmmer : MonoBehaviour, IClaneArm
         }
 
         // DOTween で回転（パワーを使って早くなるで線形に最大角度まで）
+        OnExplosion().Forget();
         await rb.transform.DOLocalRotate(new Vector3(0f, 0f, startAngle + maxHannmerAngle), 1f / power)
-            .SetEase(Ease.Flash)// 緩急をつける
+            .SetEase(Ease.Flash)
             .AsyncWaitForCompletion();
 
         await UniTask.Delay(500); // 停止待ち
