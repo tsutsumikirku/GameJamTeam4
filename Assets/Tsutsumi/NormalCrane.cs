@@ -26,6 +26,8 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
     [Header("キャッチ後の待機時間")]
     [SerializeField] private float catchWaitSeconds = 0.2f;
+    [Header("クレーンのエリア")]
+    [SerializeField] private CatchArea craneAreaCollider;
 
     public Action OnArmActionEnd { get; set; }
     public Action OnArmReleaseEnd { get; set; }
@@ -68,7 +70,7 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
     private async UniTask ArmStartAsync()
     {
-        OpenArmsInstant();
+        await OpenArmsAsync();
 
         while (!shouldEndArmAction)
         {
@@ -85,7 +87,7 @@ public class NormalCrane : MonoBehaviour, IClaneArm
         }
 
         isArmActionRunning = false;
-
+        craneAreaCollider.isCrane = true;
         await CloseArmsAsync();
 
         if (catchWaitSeconds > 0f)
@@ -104,8 +106,10 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
     private async UniTask ArmReleaseAsync()
     {
+        craneAreaCollider.isCrane = false;
         await OpenArmsAsync();
-        await UniTask.Yield();
+        await UniTask.Delay(2000); // アームが開くのを少し待つ
+        await CloseArmsAsync();
         OnArmReleaseEnd?.Invoke();
     }
 
