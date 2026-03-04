@@ -70,7 +70,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
                     transform.DOMove(startPosition, Vector2.Distance(transform.position, startPosition) / returnSpeed).SetEase(Ease.InOutSine).OnComplete(() =>
                     {
                         craneState = CraneState.ArmReleaseAction;
-                    });
+                    }).SetUpdate(UpdateType.Fixed); // ポーズ中も動くようにする
                 break;
             case CraneState.ArmReleaseAction:
                 // クレーンがアームリリースアクション状態になったときの処理
@@ -147,7 +147,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
     #endregion
 
     #region クレーンの更新処理
-    void Update()
+    private void FixedUpdate()
     {
         switch (craneState)
         {
@@ -155,16 +155,31 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 MoveCrane();
                 break;
             case CraneState.ArmAction:
-                if(Input.GetKeyDown(actionKey))
-                {
-                    currentArm.OnArmEnd();
-                }
+                
                 break;
             case CraneState.Returning:
                 break;
             case CraneState.ArmReleaseAction:
                 
                 break;
+        }
+    }
+    void Update()
+    {
+        if(craneState == CraneState.ArmAction)
+        {
+            if(Input.GetKeyDown(actionKey))
+                
+            {
+                    currentArm.OnArmEnd();
+                }
+        }
+        if(craneState == CraneState.Moving)
+        {
+            if(Input.GetKeyUp(actionKey))
+            {
+                craneState = CraneState.ArmAction;
+            }
         }
     }
     #endregion
@@ -179,10 +194,6 @@ public class CraneBase : MonoBehaviour, IPauseResume
             // 移動範囲を制限
             float clampedX = Mathf.Clamp(transform.position.x, -maxMoveX, maxMoveX);
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
-        }
-        else if(Input.GetKeyUp(actionKey))
-        {
-            craneState = CraneState.ArmAction;
         }
     }
     #endregion
