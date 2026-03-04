@@ -1,278 +1,283 @@
-using UnityEngine;
+// using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class CraneController : MonoBehaviour
-{
-    [Header("‘€ìİ’è")]
-    [SerializeField] KeyCode actionKey = KeyCode.Space;
-    [SerializeField] Vector3 moveDirection = Vector3.right;
+// [RequireComponent(typeof(Rigidbody2D))]
+// public class CraneController : MonoBehaviour
+// {
+//     [Header("ï¿½ï¿½ï¿½ï¿½İ’ï¿½")]
+//     [SerializeField] KeyCode actionKey = KeyCode.Space;
+//     [SerializeField] Vector3 moveDirection = Vector3.right;
 
-    [Header("ƒNƒŒ[ƒ“İ’è")]
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float descendSpeed = 3f;
-    [SerializeField] float descendTime = 2f;
+//     [Header("ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½İ’ï¿½")]
+//     [SerializeField] float moveSpeed = 5f;
+//     [SerializeField] float descendSpeed = 3f;
+//     [SerializeField] float descendTime = 2f;
 
-    [Header("ƒA[ƒ€İ’è (©“®æ“¾‚³‚ê‚Ü‚·)")]
-    [SerializeField] float armMotorSpeed = 150f;
-    [SerializeField] float maxMotorTorque = 1000f;
+//     [Header("ï¿½Aï¿½[ï¿½ï¿½ï¿½İ’ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)")]
+//     [SerializeField] float armMotorSpeed = 150f;
+//     [SerializeField] float maxMotorTorque = 1000f;
 
-    // ƒCƒ“ƒXƒyƒNƒ^‚Å‚Ìİ’è•s—vBƒR[ƒh“à‚Å©“®æ“¾‚µ‚Ü‚·B
-    private HingeJoint2D leftArmJoint;
-    private HingeJoint2D rightArmJoint;
+//     // ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½Å‚Ìİ’ï¿½sï¿½vï¿½Bï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+//     private HingeJoint2D leftArmJoint;
+//     private HingeJoint2D rightArmJoint;
 
-    [Header("Œ©‚½–Ú")]
-    [SerializeField] GameObject standardVisual;
-    [SerializeField] GameObject speedVisual;
-    [SerializeField] GameObject hammerVisual;
-    [SerializeField] GameObject bombVisual;
+//     [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+//     [SerializeField] GameObject standardVisual;
+//     [SerializeField] GameObject speedVisual;
+//     [SerializeField] GameObject hammerVisual;
+//     [SerializeField] GameObject bombVisual;
 
-    CraneType craneType;
-    CraneState state = CraneState.Idle;
-    bool canControl = false;
-    bool isPaused = false;
+//     CraneType craneType;
+//     CraneState state = CraneState.Idle;
+//     bool canControl = false;
+//     bool isPaused = false;
 
-    float stateTimer = 0f;
-    Rigidbody2D rb;
-    Vector3 startPosition;
+//     float stateTimer = 0f;
+//     Rigidbody2D rb;
+//     Vector3 startPosition;
 
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        // ƒNƒŒ[ƒ“–{‘Ì‚Íd—Í‚Ì‰e‹¿‚ğó‚¯‚¸A‘¬“x‚Å’¼Ú“®‚©‚·‚½‚ß Kinematic ‚ª‚¨‚·‚·‚ß
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        startPosition = transform.position;
-    }
+//     void Awake()
+//     {
+//         rb = GetComponent<Rigidbody2D>();
+//         // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½{ï¿½Ì‚Ídï¿½Í‚Ì‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚ï¿½ï¿½Aï¿½ï¿½ï¿½xï¿½Å’ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Kinematic ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//         rb.bodyType = RigidbodyType2D.Kinematic;
+//         startPosition = transform.position;
+//     }
 
-    public CraneType CraneType
-    {
-        get => craneType;
-        set { craneType = value; ApplyType(); }
-    }
+//     public CraneType CraneType
+//     {
+//         get => craneType;
+//         set { craneType = value; ApplyType(); }
+//     }
 
-    public void StartControl()
-    {
-        canControl = true;
-        state = CraneState.Moving;
-        CloseArms();
-    }
+//     public void StartControl()
+//     {
+//         canControl = true;
+//         state = CraneState.Moving;
+//         CloseArms();
+//     }
 
-    public void StopControl()
-    {
-        canControl = false;
-        state = CraneState.Idle;
-        rb.linearVelocity = Vector2.zero; // ’â~‚Í‘¬“x‚ğƒŠƒZƒbƒg (Unity6ˆÈ~‚Í linearVelocity, ŒÃ‚¢ƒo[ƒWƒ‡ƒ“‚Í velocity)
-    }
+//     public void StopControl()
+//     {
+//         canControl = false;
+//         state = CraneState.Idle;
+//         rb.linearVelocity = Vector2.zero; // ï¿½ï¿½~ï¿½ï¿½ï¿½Í‘ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g (Unity6ï¿½È~ï¿½ï¿½ linearVelocity, ï¿½Ã‚ï¿½ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ velocity)
+//     }
 
-    void Update()
-    {
-        if (!canControl || isPaused) return;
+//     void Update()
+//     {
+//         if (!canControl || isPaused) return;
 
-        // ƒL[‚ğ—£‚µ‚½‚Ì”»’è‚Í Update ‚Ås‚¤iFixedUpdate‚¾‚Ææ‚è‚±‚Ú‚·‚±‚Æ‚ª‚ ‚é‚½‚ßj
-        if (state == CraneState.Moving && Input.GetKeyUp(actionKey))
-        {
-            state = CraneState.Descending;
-            stateTimer = 0f;
-        }
-    }
+//         // ï¿½Lï¿½[ï¿½ğ—£‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½ Update ï¿½Åsï¿½ï¿½ï¿½iFixedUpdateï¿½ï¿½ï¿½Æï¿½è‚±ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ßj
+//         if (state == CraneState.Moving && Input.GetKeyUp(actionKey))
+//         {
+//             state = CraneState.Descending;
+//             stateTimer = 0f;
+//         }
+//     }
 
-    // •¨—“I‚ÈˆÚ“®‚Í FixedUpdate ‚Ås‚¤
-    void FixedUpdate()
-    {
-        if (!canControl || isPaused)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+//     // ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ÈˆÚ“ï¿½ï¿½ï¿½ FixedUpdate ï¿½Åsï¿½ï¿½
+//     void FixedUpdate()
+//     {
+//         if (!canControl || isPaused)
+//         {
+//             rb.linearVelocity = Vector2.zero;
+//             return;
+//         }
 
-        switch (state)
-        {
-            case CraneState.Moving:
-                if (Input.GetKey(actionKey))
-                {
-                    rb.linearVelocity = moveDirection * moveSpeed;
-                }
-                else
-                {
-                    rb.linearVelocity = Vector2.zero; // ƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚È‚¢‚Í~‚Ü‚é
-                }
-                break;
+//         switch (state)
+//         {
+//             case CraneState.Moving:
+//                 if (Input.GetKey(actionKey))
+//                 {
+//                     rb.linearVelocity = moveDirection * moveSpeed;
+//                 }
+//                 else
+//                 {
+//                     rb.linearVelocity = Vector2.zero; // ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Í~ï¿½Ü‚ï¿½
+//                 }
+//                 break;
 
-            case CraneState.Descending:
-                rb.linearVelocity = Vector2.down * descendSpeed;
-                stateTimer += Time.fixedDeltaTime;
+//             case CraneState.Descending:
+//                 rb.linearVelocity = Vector2.down * descendSpeed;
+//                 stateTimer += Time.fixedDeltaTime;
 
-                if (stateTimer >= descendTime)
-                {
-                    OpenArms();
-                    rb.linearVelocity = Vector2.zero; // ‰º~’â~
-                    state = CraneState.Catching;
-                    stateTimer = 0f;
-                }
-                break;
+//                 if (stateTimer >= descendTime)
+//                 {
+//                     OpenArms();
+//                     rb.linearVelocity = Vector2.zero; // ï¿½ï¿½ï¿½~ï¿½ï¿½~
+//                     state = CraneState.Catching;
+//                     stateTimer = 0f;
+//                 }
+//                 break;
 
-            case CraneState.Catching:
-                rb.linearVelocity = Vector2.zero;
-                stateTimer += Time.fixedDeltaTime;
-                if (stateTimer >= 1.0f)
-                {
-                    state = CraneState.Ascending;
-                    stateTimer = 0f;
-                }
-                break;
+//             case CraneState.Catching:
+//                 rb.linearVelocity = Vector2.zero;
+//                 stateTimer += Time.fixedDeltaTime;
+//                 if (stateTimer >= 1.0f)
+//                 {
+//                     state = CraneState.Ascending;
+//                     stateTimer = 0f;
+//                 }
+//                 break;
 
-            case CraneState.Ascending:
-                rb.linearVelocity = Vector2.up * descendSpeed;
-                stateTimer += Time.fixedDeltaTime;
+//             case CraneState.Ascending:
+//                 rb.linearVelocity = Vector2.up * descendSpeed;
+//                 stateTimer += Time.fixedDeltaTime;
 
-                if (stateTimer >= descendTime)
-                {
-                    rb.linearVelocity = Vector2.zero; // ã¸’â~
-                    state = CraneState.Returning;
-                }
-                break;
+//                 if (stateTimer >= descendTime)
+//                 {
+//                     rb.linearVelocity = Vector2.zero; // ï¿½ã¸ï¿½ï¿½~
+//                     state = CraneState.Returning;
+//                 }
+//                 break;
 
-            case CraneState.Returning:
+//             case CraneState.Returning:
 
-                Vector3 target = new Vector3(startPosition.x, transform.position.y, transform.position.z);
+//                 Vector3 target = new Vector3(startPosition.x, transform.position.y, transform.position.z);
 
-                Vector2 dir = (target - transform.position).normalized;
-                rb.linearVelocity = dir * moveSpeed;
+//                 Vector2 dir = (target - transform.position).normalized;
+//                 rb.linearVelocity = dir * moveSpeed;
 
-                // ‚ ‚é’ö“x‹ß‚Ã‚¢‚½‚ç“’…”»’è
-                if (Vector2.Distance(transform.position, target) < 0.1f)
-                {
-                    rb.linearVelocity = Vector2.zero;
-                    state = CraneState.Releasing;
-                    stateTimer = 0f;
-                }
-                break;
+//                 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ß‚Ã‚ï¿½ï¿½ï¿½ï¿½ç“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//                 if (Vector2.Distance(transform.position, target) < 0.1f)
+//                 {
+//                     rb.linearVelocity = Vector2.zero;
+//                     state = CraneState.Releasing;
+//                     stateTimer = 0f;
+//                 }
+//                 break;
 
-            case CraneState.Releasing:
-                CloseArms();
-                state = CraneState.Moving;
-                break;
-        }
-    }
+//             case CraneState.Releasing:
+//                 CloseArms();
+//                 state = CraneState.Moving;
+//                 break;
+//         }
+//     }
 
-    // --- qƒIƒuƒWƒFƒNƒgØ‚è‘Ö‚¦‚ÉƒWƒ‡ƒCƒ“ƒg‚ğæ“¾‚·‚é ---
-    void ApplyType()
-    {
-        // ƒrƒWƒ…ƒAƒ‹‚ÌØ‚è‘Ö‚¦
-        standardVisual.SetActive(craneType == CraneType.Standard);
-        speedVisual.SetActive(craneType == CraneType.Speed);
-        hammerVisual.SetActive(craneType == CraneType.HammerCrusher);
-        bombVisual.SetActive(craneType == CraneType.BombDropper);
+//     // --- ï¿½qï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½ÉƒWï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ ---
+//     void ApplyType()
+//     {
+//         // ï¿½rï¿½Wï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
+//         standardVisual.SetActive(craneType == CraneType.Standard);
+//         speedVisual.SetActive(craneType == CraneType.Speed);
+//         hammerVisual.SetActive(craneType == CraneType.HammerCrusher);
+//         bombVisual.SetActive(craneType == CraneType.BombDropper);
 
-        GameObject activeVisual = null;
-        switch (craneType)
-        {
-            case CraneType.Standard: moveSpeed = 5f; activeVisual = standardVisual; break;
-            case CraneType.Speed: moveSpeed = 8f; activeVisual = speedVisual; break;
-            case CraneType.HammerCrusher: moveSpeed = 3f; activeVisual = hammerVisual; break;
-            case CraneType.BombDropper: moveSpeed = 4f; activeVisual = bombVisual; break;
-        }
+//         GameObject activeVisual = null;
+//         switch (craneType)
+//         {
+//             case CraneType.Standard: moveSpeed = 5f; activeVisual = standardVisual; break;
+//             case CraneType.Speed: moveSpeed = 8f; activeVisual = speedVisual; break;
+//             case CraneType.HammerCrusher: moveSpeed = 3f; activeVisual = hammerVisual; break;
+//             case CraneType.BombDropper: moveSpeed = 4f; activeVisual = bombVisual; break;
+//         }
 
-        if (activeVisual != null)
-        {
-            Debug.Log($"<color=cyan>[Crane] ƒNƒŒ[ƒ“Ø‚è‘Ö‚¦: {craneType} ({activeVisual.name})</color>");
+//         if (activeVisual != null)
+//         {
+//             Debug.Log($"<color=cyan>[Crane] ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½: {craneType} ({activeVisual.name})</color>");
 
-            HingeJoint2D[] joints = activeVisual.GetComponentsInChildren<HingeJoint2D>();
-            Debug.Log($"[Crane] qƒIƒuƒWƒFƒNƒg‚©‚ç {joints.Length} ŒÂ‚Ì HingeJoint2D ‚ğŒŸo‚µ‚Ü‚µ‚½B");
+//             HingeJoint2D[] joints = activeVisual.GetComponentsInChildren<HingeJoint2D>();
+//             Debug.Log($"[Crane] ï¿½qï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ {joints.Length} ï¿½Â‚ï¿½ HingeJoint2D ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
 
-            if (joints.Length >= 2)
-            {
-                // XÀ•W‚ğ”äŠr‚µ‚Ä¶‰E‚ğ”»•Ê
-                if (joints[0].transform.localPosition.x < joints[1].transform.localPosition.x)
-                {
-                    leftArmJoint = joints[0];
-                    rightArmJoint = joints[1];
-                }
-                else
-                {
-                    leftArmJoint = joints[1];
-                    rightArmJoint = joints[0];
-                }
+//             if (joints.Length >= 2)
+//             {
+//                 // Xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½rï¿½ï¿½ï¿½Äï¿½ï¿½Eï¿½ğ”»•ï¿½
+//                 if (joints[0].transform.localPosition.x < joints[1].transform.localPosition.x)
+//                 {
+//                     leftArmJoint = joints[0];
+//                     rightArmJoint = joints[1];
+//                 }
+//                 else
+//                 {
+//                     leftArmJoint = joints[1];
+//                     rightArmJoint = joints[0];
+//                 }
 
-                Debug.Log($"<color=green>[Crane] ƒWƒ‡ƒCƒ“ƒgŠ„“–¬Œ÷: ¶={leftArmJoint.name}(x:{leftArmJoint.transform.localPosition.x}), ‰E={rightArmJoint.name}(x:{rightArmJoint.transform.localPosition.x})</color>");
-            }
-            else
-            {
-                Debug.LogError($"<color=red>[Crane] ƒGƒ‰[: {activeVisual.name} ‚Ì’†‚É HingeJoint2D ‚ª 2‚ÂˆÈãŒ©‚Â‚©‚è‚Ü‚¹‚ñI (Œ»İ: {joints.Length}ŒÂ)</color>");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[Crane] ActiveVisual ‚ª null ‚Å‚·BƒCƒ“ƒXƒyƒNƒ^‚Ì GameObject Š„‚è“–‚Ä‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
-        }
-    }
+//                 Debug.Log($"<color=green>[Crane] ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½={leftArmJoint.name}(x:{leftArmJoint.transform.localPosition.x}), ï¿½E={rightArmJoint.name}(x:{rightArmJoint.transform.localPosition.x})</color>");
+//             }
+//             else
+//             {
+//                 Debug.LogError($"<color=red>[Crane] ï¿½Gï¿½ï¿½ï¿½[: {activeVisual.name} ï¿½Ì’ï¿½ï¿½ï¿½ HingeJoint2D ï¿½ï¿½ 2ï¿½ÂˆÈãŒ©ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I (ï¿½ï¿½ï¿½ï¿½: {joints.Length}ï¿½ï¿½)</color>");
+//             }
+//         }
+//         else
+//         {
+//             Debug.LogWarning("[Crane] ActiveVisual ï¿½ï¿½ null ï¿½Å‚ï¿½ï¿½Bï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½ï¿½ GameObject ï¿½ï¿½ï¿½è“–ï¿½Ä‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B");
+//         }
+//     }
 
-    // --- ƒA[ƒ€ŠJ•Â ---
-    void OpenArms()
-    {
-        SetMotorSpeed(-armMotorSpeed, armMotorSpeed);
-    }
-    void CloseArms()
-    {
-        SetMotorSpeed(armMotorSpeed, -armMotorSpeed);
-    }
+//     // --- ï¿½Aï¿½[ï¿½ï¿½ï¿½Jï¿½ï¿½ ---
+//     void OpenArms()
+//     {
+//         SetMotorSpeed(-armMotorSpeed, armMotorSpeed);
+//     }
+//     void CloseArms()
+//     {
+//         SetMotorSpeed(armMotorSpeed, -armMotorSpeed);
+//     }
 
-    void SetMotorSpeed(float leftSpeed, float rightSpeed)
-    {
-        if (leftArmJoint != null)
-        {
-            JointMotor2D leftMotor = leftArmJoint.motor;
-            leftMotor.motorSpeed = leftSpeed;
-            leftMotor.maxMotorTorque = maxMotorTorque;
-            leftArmJoint.motor = leftMotor;
-            leftArmJoint.useMotor = true;
-        }
+//     void SetMotorSpeed(float leftSpeed, float rightSpeed)
+//     {
+//         if (leftArmJoint != null)
+//         {
+//             JointMotor2D leftMotor = leftArmJoint.motor;
+//             leftMotor.motorSpeed = leftSpeed;
+//             leftMotor.maxMotorTorque = maxMotorTorque;
+//             leftArmJoint.motor = leftMotor;
+//             leftArmJoint.useMotor = true;
+//         }
 
-        if (rightArmJoint != null)
-        {
-            JointMotor2D rightMotor = rightArmJoint.motor;
-            rightMotor.motorSpeed = rightSpeed;
-            rightMotor.maxMotorTorque = maxMotorTorque;
-            rightArmJoint.motor = rightMotor;
-            rightArmJoint.useMotor = true;
-        }
-    }
-    private void StopArms()
-    {
-        if (leftArmJoint != null)
-            leftArmJoint.useMotor = false;
+//         if (rightArmJoint != null)
+//         {
+//             JointMotor2D rightMotor = rightArmJoint.motor;
+//             rightMotor.motorSpeed = rightSpeed;
+//             rightMotor.maxMotorTorque = maxMotorTorque;
+//             rightArmJoint.motor = rightMotor;
+//             rightArmJoint.useMotor = true;
+//         }
+//     }
+//     private void StopArms()
+//     {
+//         if (leftArmJoint != null)
+//             leftArmJoint.useMotor = false;
 
-        if (rightArmJoint != null)
-            rightArmJoint.useMotor = false;
-    }
+//         if (rightArmJoint != null)
+//             rightArmJoint.useMotor = false;
+//     }
 
-    public void Pause()
-    {
-        isPaused = true;
-    }
-    public void Resume()
-    {
-        isPaused = false;
-    }
-}
+//     public void Pause()
+//     {
+//         isPaused = true;
+//     }
+//     public void Resume()
+//     {
+//         isPaused = false;
+//     }
+//     public void OnFloorClane()
+//     {
+//         if(state == CraneState.Ascending)return;
+//         stateTimer += descendTime;
+//     }
+// }
 
-// ƒNƒŒ[ƒ“‚Ìí—Ş‚ğ’è‹`‚·‚é—ñ‹“Œ^
-// 4í‚©‚ç‘I‚ñ‚¾‚à‚Ì‚¾‚¯‚ğSetActive(True)‚É‚µ‚Ä‚¢‚é‚ªPrefab‚Ì‚Ù‚¤‚ª‚¢‚¢‹C‚ª‚µ‚Ü‚·
-public enum CraneType
-{
-    Standard,
-    Speed,
-    HammerCrusher,
-    BombDropper
-}
+// ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìï¿½Ş‚ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ñ‹“Œ^
+// 4ï¿½í‚©ï¿½ï¿½Iï¿½ñ‚¾‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½SetActive(True)ï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªPrefabï¿½Ì‚Ù‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
+// public enum CraneType
+// {
+//     Standard,
+//     Speed,
+//     HammerCrusher,
+//     BombDropper
+// }
 
-// ƒXƒe[ƒg‚É Catching ‚Æ Releasing ‚ğ’Ç‰Á
-public enum CraneState
-{
-    Idle,
-    Moving,
-    Descending,
-    Catching,
-    Ascending,
-    Returning,
-    Releasing
-}
+// ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½ Catching ï¿½ï¿½ Releasing ï¿½ï¿½Ç‰ï¿½
+// public enum CraneState
+// {
+//     Idle,
+//     Moving,
+//     Descending,
+//     Catching,
+//     Ascending,
+//     Returning,
+//     Releasing
+// }

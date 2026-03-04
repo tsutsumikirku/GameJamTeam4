@@ -1,33 +1,33 @@
 using UnityEngine;
 
 /// <summary>
-/// GameManager‚ÌŠÈˆÕƒeƒXƒg”ÅBƒNƒŒ[ƒ“‚Ì‰Šú‰»‚Æ‘€ìŠJn‚ğs‚¤B
+/// GameManagerï¿½ÌŠÈˆÕƒeï¿½Xï¿½gï¿½ÅBï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‘ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½sï¿½ï¿½ï¿½B
 /// </summary>
 public class CraneTest : MonoBehaviour
 {
-    [Header("ƒvƒŒƒCİ’è")]
+    [Header("ï¿½vï¿½ï¿½ï¿½Cï¿½İ’ï¿½")]
     [SerializeField, Range(1, 2)] int playerCount = 1;
 
     [Header("P1")]
-    [SerializeField] CraneController playerOneCrane;
+    //[SerializeField] CraneController playerOneCrane;
     [SerializeField] CraneType playerOneCraneType;
 
     [Header("P2")]
-    [SerializeField] CraneController playerTwoCrane;
+    //[SerializeField] CraneController playerTwoCrane;
     [SerializeField] CraneType playerTwoCraneType;
 
     /// <summary>
-    /// ƒNƒŒ[ƒ“‚Ìí—Ş‚ğİ’è‚µA‘€ì‚ğŠJn‚·‚éB
+    /// ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìï¿½Ş‚ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½B
     /// </summary>
-    void Start()
-    {
-        playerOneCrane.CraneType = playerOneCraneType;
-        playerOneCrane.StartControl();
+    // void Start()
+    // {
+    //     playerOneCrane.CraneType = playerOneCraneType;
+    //     playerOneCrane.StartControl();
 
-        if (playerCount >= 2 && playerTwoCrane != null)
-        {
-            playerTwoCrane.CraneType = playerTwoCraneType;
-            playerTwoCrane.StartControl();
-        }
-    }
+    //     if (playerCount >= 2 && playerTwoCrane != null)
+    //     {
+    //         playerTwoCrane.CraneType = playerTwoCraneType;
+    //         playerTwoCrane.StartControl();
+    //     }
+    // }
 }
