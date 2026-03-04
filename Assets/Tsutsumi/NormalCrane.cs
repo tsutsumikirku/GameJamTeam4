@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class NormalCrane : MonoBehaviour, IClaneArm
 {
+    private enum VerticalMoveState
+    {
+        Idle,
+        Descending,
+        Ascending
+    }
+
     [Header("アーム参照")]
     [SerializeField] private Transform rightArm;
     [SerializeField] private Transform leftArm;
@@ -23,33 +30,28 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     [SerializeField] private float leftCloseAngle = 3f;
 
     [Header("アーム回転速度（度 / 秒）")]
-    [SerializeField] private float closeAngularSpeed = 180f;
     [SerializeField] private float openAngularSpeed = 180f;
+    [SerializeField] private float closeAngularSpeed = 180f;
 
-    [Header("演出待機")]
+    [Header("演出")]
     [SerializeField] private float gripDelaySeconds = 0.15f;
-
-    [Header("上昇完了許容誤差")]
     [SerializeField] private float ascendStopDistance = 0.01f;
 
     public Action OnArmActionEnd { get; set; }
     public Action OnArmReleaseEnd { get; set; }
 
-    private bool isDescending;
-    private bool isAscending;
+    private VerticalMoveState verticalMoveState = VerticalMoveState.Idle;
+    private bool isActionRunning;
+    private bool descendStopRequested;
+    private Vector2 startWorldPosition;
+
     private Tween rightArmTween;
     private Tween leftArmTween;
-    private Vector2 startWorldPosition;
 
     private void Awake()
     {
-        if (rb == null)
-        {
-            rb = GetComponent<Rigidbody2D>();
-        }
-
+        TryResolveReferences();
         startWorldPosition = rb != null ? rb.position : (Vector2)transform.position;
-        AutoAssignArms();
     }
 
     private void FixedUpdate()
@@ -59,60 +61,64 @@ public class NormalCrane : MonoBehaviour, IClaneArm
             return;
         }
 
-        if (isDescending)
+        if (verticalMoveState == VerticalMoveState.Descending)
         {
-            Vector2 nextPosition = rb.position + (Vector2.down * descendSpeed * Time.fixedDeltaTime);
-            rb.MovePosition(nextPosition);
+            rb.MovePosition(rb.position + Vector2.down * descendSpeed * Time.fixedDeltaTime);
             return;
         }
 
-        if (isAscending)
+        if (verticalMoveState == VerticalMoveState.Ascending)
         {
-            Vector2 nextPosition = Vector2.MoveTowards(rb.position, startWorldPosition, ascendSpeed * Time.fixedDeltaTime);
-            rb.MovePosition(nextPosition);
+            Vector2 next = Vector2.MoveTowards(rb.position, startWorldPosition, ascendSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(next);
 
-            if (Vector2.Distance(nextPosition, startWorldPosition) <= ascendStopDistance)
+            if (Vector2.Distance(next, startWorldPosition) <= ascendStopDistance)
             {
-                isAscending = false;
+                verticalMoveState = VerticalMoveState.Idle;
             }
         }
     }
 
-    private void OnDestroy()
-    {
-        rightArmTween?.Kill();
-        leftArmTween?.Kill();
-    }
-
     public void OnArmStart()
     {
-        OnArmStartAsync().Forget();
+        if (isActionRunning)
+        {
+            return;
+        }
+
+        ArmActionSequenceAsync().Forget();
     }
 
     public void OnArmEnd()
     {
-        isDescending = false;
+        if (verticalMoveState == VerticalMoveState.Descending)
+        {
+            descendStopRequested = true;
+            verticalMoveState = VerticalMoveState.Idle;
+        }
     }
 
     public void OnArmRelease()
     {
-        OnArmReleaseAsync().Forget();
+        ArmReleaseSequenceAsync().Forget();
     }
 
-    private async UniTask OnArmStartAsync()
+    private async UniTask ArmActionSequenceAsync()
     {
-        if (!ValidateDependencies())
+        if (!TryResolveReferences())
         {
             OnArmActionEnd?.Invoke();
             return;
         }
 
+        isActionRunning = true;
+        descendStopRequested = false;
         startWorldPosition = rb.position;
 
         await RotateArmsAsync(rightOpenAngle, leftOpenAngle, openAngularSpeed);
 
-        isDescending = true;
-        await UniTask.WaitUntil(() => !isDescending);
+        verticalMoveState = VerticalMoveState.Descending;
+        await UniTask.WaitUntil(() => descendStopRequested);
 
         await RotateArmsAsync(rightCloseAngle, leftCloseAngle, closeAngularSpeed);
 
@@ -121,15 +127,16 @@ public class NormalCrane : MonoBehaviour, IClaneArm
             await UniTask.Delay(TimeSpan.FromSeconds(gripDelaySeconds));
         }
 
-        isAscending = true;
-        await UniTask.WaitUntil(() => !isAscending);
+        verticalMoveState = VerticalMoveState.Ascending;
+        await UniTask.WaitUntil(() => verticalMoveState == VerticalMoveState.Idle);
 
+        isActionRunning = false;
         OnArmActionEnd?.Invoke();
     }
 
-    private async UniTask OnArmReleaseAsync()
+    private async UniTask ArmReleaseSequenceAsync()
     {
-        if (!ValidateDependencies())
+        if (!TryResolveReferences())
         {
             OnArmReleaseEnd?.Invoke();
             return;
@@ -144,8 +151,9 @@ public class NormalCrane : MonoBehaviour, IClaneArm
         rightArmTween?.Kill();
         leftArmTween?.Kill();
 
-        float rightDuration = Mathf.Abs(Mathf.DeltaAngle(rightArm.localEulerAngles.z, rightTargetZ)) / Mathf.Max(0.01f, angularSpeed);
-        float leftDuration = Mathf.Abs(Mathf.DeltaAngle(leftArm.localEulerAngles.z, leftTargetZ)) / Mathf.Max(0.01f, angularSpeed);
+        float safeSpeed = Mathf.Max(0.01f, angularSpeed);
+        float rightDuration = Mathf.Abs(Mathf.DeltaAngle(rightArm.localEulerAngles.z, rightTargetZ)) / safeSpeed;
+        float leftDuration = Mathf.Abs(Mathf.DeltaAngle(leftArm.localEulerAngles.z, leftTargetZ)) / safeSpeed;
 
         rightArmTween = rightArm.DOLocalRotate(new Vector3(0f, 0f, rightTargetZ), rightDuration).SetEase(Ease.InOutSine);
         leftArmTween = leftArm.DOLocalRotate(new Vector3(0f, 0f, leftTargetZ), leftDuration).SetEase(Ease.InOutSine);
@@ -155,42 +163,35 @@ public class NormalCrane : MonoBehaviour, IClaneArm
             leftArmTween.AsyncWaitForCompletion().AsUniTask());
     }
 
-    private bool ValidateDependencies()
+    private bool TryResolveReferences()
     {
         if (rb == null)
         {
             rb = GetComponent<Rigidbody2D>();
         }
 
-        AutoAssignArms();
-
-        if (rb != null && rightArm != null && leftArm != null)
-        {
-            return true;
-        }
-
-        Debug.LogWarning("NormalCrane: Rigidbody2D または rightArm / leftArm が未設定です。Inspectorで設定してください。", this);
-        return false;
-    }
-
-    private void AutoAssignArms()
-    {
         if (rightArm == null)
         {
-            Transform foundRight = transform.Find("rightArm");
-            if (foundRight != null)
-            {
-                rightArm = foundRight;
-            }
+            rightArm = transform.Find("rightArm");
         }
 
         if (leftArm == null)
         {
-            Transform foundLeft = transform.Find("leftArm");
-            if (foundLeft != null)
-            {
-                leftArm = foundLeft;
-            }
+            leftArm = transform.Find("leftArm");
         }
+
+        bool ok = rb != null && rightArm != null && leftArm != null;
+        if (!ok)
+        {
+            Debug.LogWarning("NormalCrane: Rigidbody2D / rightArm / leftArm の参照が不足しています。", this);
+        }
+
+        return ok;
+    }
+
+    private void OnDestroy()
+    {
+        rightArmTween?.Kill();
+        leftArmTween?.Kill();
     }
 }

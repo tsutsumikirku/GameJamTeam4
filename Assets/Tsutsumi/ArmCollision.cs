@@ -2,24 +2,24 @@ using UnityEngine;
 
 public class ArmCollision : MonoBehaviour
 {
-    [SerializeField] NormalCrane normalCrane;
-    [SerializeField] Hanmmer hanmmer;
-    [SerializeField] private float impactThreshold = 10f; // これ以上の衝撃で OnArmEnd を呼ぶ
+    [SerializeField] private NormalCrane normalCrane;
+    [SerializeField] private Hanmmer hanmmer;
 
     [Header("床判定")]
     [SerializeField] private string floorTag = "Floor";
-    [SerializeField] private string floorLayerName = "Floor";
+    [SerializeField] private LayerMask floorLayers;
 
-    private int floorLayer = -1;
+    [Header("ハンマー衝撃停止")]
+    [SerializeField] private float impactThreshold = 10f;
+
     private Rigidbody2D cachedRb;
 
-    void Awake()
+    private void Awake()
     {
         cachedRb = GetComponentInParent<Rigidbody2D>();
-        floorLayer = LayerMask.NameToLayer(floorLayerName);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (IsFloor(collision.transform))
         {
@@ -27,26 +27,24 @@ public class ArmCollision : MonoBehaviour
             return;
         }
 
-        // 通常クレーンはアイテム接触では止めない（掴み判定のため）
-
-        // ハンマーのみ、Floor 以外との強衝突で停止
+        // 通常クレーンはアイテム接触で止めない
         if (hanmmer == null)
+        {
             return;
+        }
 
-        float otherMass = collision.rigidbody != null ? collision.rigidbody.mass : 0f;
         float selfMass = cachedRb != null ? cachedRb.mass : 0f;
-        float combinedMass = selfMass + otherMass;
-        if (combinedMass <= 0f)
-            combinedMass = 1f;
+        float otherMass = collision.rigidbody != null ? collision.rigidbody.mass : 0f;
+        float mass = Mathf.Max(1f, selfMass + otherMass);
+        float impact = collision.relativeVelocity.magnitude * mass;
 
-        float impact = collision.relativeVelocity.magnitude * combinedMass;
         if (impact >= impactThreshold)
         {
             hanmmer.OnArmEnd();
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (IsFloor(collision.transform))
         {
@@ -57,23 +55,30 @@ public class ArmCollision : MonoBehaviour
     private void StopArms()
     {
         if (normalCrane != null)
+        {
             normalCrane.OnArmEnd();
+        }
+
         if (hanmmer != null)
+        {
             hanmmer.OnArmEnd();
+        }
     }
 
-    private bool IsFloor(Transform hitTransform)
+    private bool IsFloor(Transform hit)
     {
-        Transform current = hitTransform;
+        Transform current = hit;
         while (current != null)
         {
             GameObject go = current.gameObject;
 
-            if (go.tag == floorTag)
-                return true;
+            bool tagMatch = !string.IsNullOrEmpty(floorTag) && go.tag == floorTag;
+            bool layerMatch = (floorLayers.value & (1 << go.layer)) != 0;
 
-            if (floorLayer >= 0 && go.layer == floorLayer)
+            if (tagMatch || layerMatch)
+            {
                 return true;
+            }
 
             current = current.parent;
         }
