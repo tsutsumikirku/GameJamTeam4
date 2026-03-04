@@ -13,6 +13,8 @@ public class FallingItem : MonoBehaviour
     int currentTimeIndex = 0;
     int initialCount;
     bool spawned = false;
+    public AudioSource audioSource;
+    public AudioClip spawnSE;
 
     private void Start()
     {
@@ -53,6 +55,7 @@ public class FallingItem : MonoBehaviour
             GameObject prefab = GetRandomPrefab();
             if (prefab == null) continue;
 
+            audioSource.PlayOneShot(spawnSE);
             Vector3 pos;
             int tryCount = 80;
             while (tryCount > 0)
