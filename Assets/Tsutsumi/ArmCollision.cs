@@ -14,35 +14,44 @@ public class ArmCollision : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Floor"))
         {
-            if(normalCrane != null)
+            // 通常クレーンは床に到達した時だけ停止
+            if (normalCrane != null)
                 normalCrane.OnArmEnd();
-            if(hanmmer != null)
+
+            // ハンマーは床接触で停止
+            if (hanmmer != null)
                 hanmmer.OnArmEnd();
             return;
         }
 
-        // Floor 以外との衝突で一定以上の力があればアーム終了
+        // 通常クレーンはアイテム接触では止めない（掴み判定のため）
+
+        // ハンマーのみ、Floor 以外との強衝突で停止
+        if (hanmmer == null)
+            return;
+
         float otherMass = collision.rigidbody != null ? collision.rigidbody.mass : 0f;
         float selfMass = cachedRb != null ? cachedRb.mass : 0f;
         float combinedMass = selfMass + otherMass;
         if (combinedMass <= 0f)
             combinedMass = 1f;
+
         float impact = collision.relativeVelocity.magnitude * combinedMass;
         if (impact >= impactThreshold)
         {
-            if(normalCrane != null) normalCrane.OnArmEnd();
-            if(hanmmer != null) hanmmer.OnArmEnd();
+            hanmmer.OnArmEnd();
         }
     }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Floor"))
         {
-            if(normalCrane != null)                
-            normalCrane.OnArmEnd();
-            if(hanmmer != null)
+            if (normalCrane != null)
+                normalCrane.OnArmEnd();
+            if (hanmmer != null)
                 hanmmer.OnArmEnd();
         }
     }
