@@ -9,6 +9,9 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     [SerializeField] private Transform rightArm;
     [SerializeField] private Transform leftArm;
 
+    [Header("物理")]
+    [SerializeField] private Rigidbody2D rb;
+
     [Header("移動速度")]
     [SerializeField] private float descendSpeed = 3f;
     [SerializeField] private float ascendSpeed = 4f;
@@ -26,18 +29,53 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     [Header("演出待機")]
     [SerializeField] private float gripDelaySeconds = 0.15f;
 
+    [Header("上昇完了許容誤差")]
+    [SerializeField] private float ascendStopDistance = 0.01f;
+
     public Action OnArmActionEnd { get; set; }
     public Action OnArmReleaseEnd { get; set; }
 
-    private Vector3 startPosition;
     private bool isDescending;
+    private bool isAscending;
     private Tween rightArmTween;
     private Tween leftArmTween;
+    private Vector2 startWorldPosition;
 
     private void Awake()
     {
-        startPosition = transform.localPosition;
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        startWorldPosition = rb != null ? rb.position : (Vector2)transform.position;
         AutoAssignArms();
+    }
+
+    private void FixedUpdate()
+    {
+        if (rb == null)
+        {
+            return;
+        }
+
+        if (isDescending)
+        {
+            Vector2 nextPosition = rb.position + (Vector2.down * descendSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(nextPosition);
+            return;
+        }
+
+        if (isAscending)
+        {
+            Vector2 nextPosition = Vector2.MoveTowards(rb.position, startWorldPosition, ascendSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(nextPosition);
+
+            if (Vector2.Distance(nextPosition, startWorldPosition) <= ascendStopDistance)
+            {
+                isAscending = false;
+            }
+        }
     }
 
     private void OnDestroy()
@@ -63,22 +101,18 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
     private async UniTask OnArmStartAsync()
     {
-        if (!ValidateArms())
+        if (!ValidateDependencies())
         {
             OnArmActionEnd?.Invoke();
             return;
         }
 
-        startPosition = transform.localPosition;
-        isDescending = true;
+        startWorldPosition = rb.position;
 
         await RotateArmsAsync(rightOpenAngle, leftOpenAngle, openAngularSpeed);
 
-        while (isDescending)
-        {
-            transform.Translate(Vector3.down * descendSpeed * Time.deltaTime, Space.Self);
-            await UniTask.Yield();
-        }
+        isDescending = true;
+        await UniTask.WaitUntil(() => !isDescending);
 
         await RotateArmsAsync(rightCloseAngle, leftCloseAngle, closeAngularSpeed);
 
@@ -87,17 +121,15 @@ public class NormalCrane : MonoBehaviour, IClaneArm
             await UniTask.Delay(TimeSpan.FromSeconds(gripDelaySeconds));
         }
 
-        float ascendDuration = Vector3.Distance(transform.localPosition, startPosition) / Mathf.Max(0.01f, ascendSpeed);
-        await transform.DOLocalMove(startPosition, ascendDuration)
-            .SetEase(Ease.InOutSine)
-            .AsyncWaitForCompletion();
+        isAscending = true;
+        await UniTask.WaitUntil(() => !isAscending);
 
         OnArmActionEnd?.Invoke();
     }
 
     private async UniTask OnArmReleaseAsync()
     {
-        if (!ValidateArms())
+        if (!ValidateDependencies())
         {
             OnArmReleaseEnd?.Invoke();
             return;
@@ -120,20 +152,24 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
         await UniTask.WhenAll(
             rightArmTween.AsyncWaitForCompletion().AsUniTask(),
-            leftArmTween.AsyncWaitForCompletion().AsUniTask()
-        );
+            leftArmTween.AsyncWaitForCompletion().AsUniTask());
     }
 
-    private bool ValidateArms()
+    private bool ValidateDependencies()
     {
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
         AutoAssignArms();
 
-        if (rightArm != null && leftArm != null)
+        if (rb != null && rightArm != null && leftArm != null)
         {
             return true;
         }
 
-        Debug.LogWarning("NormalCrane: rightArm / leftArm が未設定です。Inspectorで設定してください。", this);
+        Debug.LogWarning("NormalCrane: Rigidbody2D または rightArm / leftArm が未設定です。Inspectorで設定してください。", this);
         return false;
     }
 
