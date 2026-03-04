@@ -12,6 +12,7 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     [Header("下降/上昇速度")]
     [SerializeField] private float descendSpeed = 2.5f;
     [SerializeField] private float ascendSpeed = 3.5f;
+    [SerializeField] private float maxDescendDistance = 4f;
 
     [Header("アームの角度設定")]
     [SerializeField] private float leftOpenAngle = 35f;
@@ -31,6 +32,7 @@ public class NormalCrane : MonoBehaviour, IClaneArm
 
     private Vector3 startLocalPosition;
     private bool isArmActionRunning;
+    private bool shouldEndArmAction;
 
     void Awake()
     {
@@ -45,12 +47,18 @@ public class NormalCrane : MonoBehaviour, IClaneArm
         }
 
         isArmActionRunning = true;
+        shouldEndArmAction = false;
         ArmStartAsync().Forget();
     }
 
     public void OnArmEnd()
     {
-        isArmActionRunning = false;
+        if (!isArmActionRunning)
+        {
+            return;
+        }
+
+        shouldEndArmAction = true;
     }
 
     public void OnArmRelease()
@@ -62,11 +70,21 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     {
         OpenArmsInstant();
 
-        while (isArmActionRunning)
+        while (!shouldEndArmAction)
         {
             transform.Translate(Vector3.down * descendSpeed * Time.deltaTime, Space.Self);
+
+            float descendedDistance = Mathf.Abs(transform.localPosition.y - startLocalPosition.y);
+            if (descendedDistance >= maxDescendDistance)
+            {
+                shouldEndArmAction = true;
+                break;
+            }
+
             await UniTask.Yield(PlayerLoopTiming.Update);
         }
+
+        isArmActionRunning = false;
 
         await CloseArmsAsync();
 
