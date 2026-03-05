@@ -68,8 +68,8 @@ MonoBehaviour:
     rate: 10
   - prefab: {fileID: 5810162038842943204, guid: 9937bbfbdc45b9e419c8ea920ed70e35, type: 3}
     rate: 10
-  - prefab: {fileID: 7612186180114869305, guid: 5ef47f52b2cf75b46bc2fe94954e26b7, type: 3}
-    rate: 20
+  - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+    rate: 10
   spawnPoint: {fileID: 0}
   spawnTimes:
   - 30
