@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2558633615230631597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7351773857591490656}
+  - component: {fileID: 8192857166696922146}
+  - component: {fileID: 3410360391821695047}
+  m_Layer: 0
+  m_Name: ItemSeup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7351773857591490656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2558633615230631597}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.18831858, y: 5.46, z: 14.1790085}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8192857166696922146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2558633615230631597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06eb039791d5676419ef7680b17fb09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnSlots:
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 7406192908634955786, guid: fe89da75e94134a479b3ea7fd2e1d302, type: 3}
+      rate: 10
+    - prefab: {fileID: 4831105370205713512, guid: 72c9eeb641ccc8b42ab8812433e92788, type: 3}
+      rate: 10
+    - prefab: {fileID: 6471897976919515924, guid: 9782d4e9ee9293845a5780434b039c04, type: 3}
+      rate: 10
+    - prefab: {fileID: 5973464960207589107, guid: 372e883f0deb0834187f4a715a30f1ba, type: 3}
+      rate: 10
+    - prefab: {fileID: 6515893824657761681, guid: 97349dc8f18f649419c997b747ed2ec7, type: 3}
+      rate: 10
+    - prefab: {fileID: 5368231121148700822, guid: b411aae116bdd5a4b838074d74a30a26, type: 3}
+      rate: 15
+    - prefab: {fileID: 1243817390588115050, guid: d420d6835d6c88c40872b5b739680c34, type: 3}
+      rate: 15
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 20
+    minCount: 3
+    maxCount: 4
+    rangeX: 3
+    rangeY: 2
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 2856440382848591012, guid: b38f3e8d73821e14fab81138d35e82a8, type: 3}
+      rate: 20
+    - prefab: {fileID: 2327716980830087007, guid: 120d28f996845854ba4459f1c5d921c1, type: 3}
+      rate: 20
+    - prefab: {fileID: 3573563835477195115, guid: 527ba2149df0f7c499ef23433865520f, type: 3}
+      rate: 30
+    - prefab: {fileID: 336283321531588897, guid: fbc77f9c44243874c9545625c3e65a98, type: 3}
+      rate: 10
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 20
+    minCount: 4
+    maxCount: 5
+    rangeX: 2
+    rangeY: 1
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 7979622608118212700, guid: 887e219c5009f464b808e014cad1046f, type: 3}
+      rate: 20
+    - prefab: {fileID: 3573563835477195115, guid: 527ba2149df0f7c499ef23433865520f, type: 3}
+      rate: 30
+    - prefab: {fileID: 5810162038842943204, guid: 9937bbfbdc45b9e419c8ea920ed70e35, type: 3}
+      rate: 10
+    - prefab: {fileID: 3734914639035309601, guid: beef598721da65940ab09d555b5ac9be, type: 3}
+      rate: 10
+    - prefab: {fileID: 7612186180114869305, guid: 5ef47f52b2cf75b46bc2fe94954e26b7, type: 3}
+      rate: 20
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 10
+    minCount: 4
+    maxCount: 5
+    rangeX: 2
+    rangeY: 1
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 7406192908634955786, guid: fe89da75e94134a479b3ea7fd2e1d302, type: 3}
+      rate: 10
+    - prefab: {fileID: 4831105370205713512, guid: 72c9eeb641ccc8b42ab8812433e92788, type: 3}
+      rate: 10
+    - prefab: {fileID: 6471897976919515924, guid: 9782d4e9ee9293845a5780434b039c04, type: 3}
+      rate: 10
+    - prefab: {fileID: 5973464960207589107, guid: 372e883f0deb0834187f4a715a30f1ba, type: 3}
+      rate: 10
+    - prefab: {fileID: 6515893824657761681, guid: 97349dc8f18f649419c997b747ed2ec7, type: 3}
+      rate: 10
+    - prefab: {fileID: 5368231121148700822, guid: b411aae116bdd5a4b838074d74a30a26, type: 3}
+      rate: 15
+    - prefab: {fileID: 1243817390588115050, guid: d420d6835d6c88c40872b5b739680c34, type: 3}
+      rate: 15
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 20
+    minCount: 3
+    maxCount: 4
+    rangeX: 3
+    rangeY: 1
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 2856440382848591012, guid: b38f3e8d73821e14fab81138d35e82a8, type: 3}
+      rate: 20
+    - prefab: {fileID: 2327716980830087007, guid: 120d28f996845854ba4459f1c5d921c1, type: 3}
+      rate: 20
+    - prefab: {fileID: 3573563835477195115, guid: 527ba2149df0f7c499ef23433865520f, type: 3}
+      rate: 30
+    - prefab: {fileID: 336283321531588897, guid: fbc77f9c44243874c9545625c3e65a98, type: 3}
+      rate: 10
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 20
+    minCount: 4
+    maxCount: 5
+    rangeX: 2
+    rangeY: 1
+  - point: {fileID: 0}
+    items:
+    - prefab: {fileID: 7979622608118212700, guid: 887e219c5009f464b808e014cad1046f, type: 3}
+      rate: 20
+    - prefab: {fileID: 3573563835477195115, guid: 527ba2149df0f7c499ef23433865520f, type: 3}
+      rate: 30
+    - prefab: {fileID: 5810162038842943204, guid: 9937bbfbdc45b9e419c8ea920ed70e35, type: 3}
+      rate: 10
+    - prefab: {fileID: 3734914639035309601, guid: beef598721da65940ab09d555b5ac9be, type: 3}
+      rate: 10
+    - prefab: {fileID: 7612186180114869305, guid: 5ef47f52b2cf75b46bc2fe94954e26b7, type: 3}
+      rate: 20
+    - prefab: {fileID: 824368992327933952, guid: 1960c203ccbfa894cad300818a2d70ff, type: 3}
+      rate: 10
+    minCount: 4
+    maxCount: 5
+    rangeX: 2
+    rangeY: 1
+--- !u!114 &3410360391821695047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2558633615230631597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6295bd56be871a84b8144a0b4fa379d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
