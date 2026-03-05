@@ -27,4 +27,15 @@ public class CatchArea : MonoBehaviour
             }
         }
     }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag != "Item")return;
+            // RigidBody2Dを有効化して親から外す
+            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                collision.transform.SetParent(null);
+            }
+    }
 }

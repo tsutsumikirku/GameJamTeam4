@@ -25,7 +25,7 @@ public class ArmCollision : MonoBehaviour
                 hanmmer.OnArmEnd();
             return;
         }
-
+        if(other.gameObject.tag == "Player")return;
         // Floor 以外との衝突で一定以上の力があればアーム終了
         float otherMass = other.rigidbody != null ? other.rigidbody.mass : 0f;
         float selfMass = cachedRb != null ? cachedRb.mass : 0f;
