@@ -1,7 +1,6 @@
 
 using System;
 using DG.Tweening;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class CraneBase : MonoBehaviour, IPauseResume
@@ -83,26 +82,26 @@ public class CraneBase : MonoBehaviour, IPauseResume
         }
     }} 
     #endregion
-
-    void Start()
-    {
-        craneState = CraneState.DontMove;
-        Inittialize(craneType); // クレーンの初期化処理を呼び出す
-        craneState = CraneState.Moving; // ゲーム開始時のクレーンの状態を移動に設定
-        startPosition = transform.position; // クレーンの開始位置を保存
-    }
     #region 初期化処理
     public void Inittialize(CraneType type)
     {
         craneType = type;
+        startPosition = transform.position;
         // クレーンのタイプに応じた初期化処理をここに追加
         switch (craneType)
         {
             case CraneType.Standard:
                 var data = Array.Find(craneDatas, c => c.craneType == CraneType.Standard);
+                
                 if (data != null)                {
                     // スタンダードクレーンのアームを有効化                    
                     data.craneArm.SetActive(true);
+                    this.maxMoveX = data.craneData.maxMoveX;
+                    this.moveSpeed = data.craneData.moveSpeed;
+                    this.descendSpeed = data.craneData.descendSpeed;
+                    this.ascendTime = data.craneData.ascendTime;
+                    this.returnSpeed = data.craneData.returnSpeed;
+                    this.armRotationTime = data.craneData.armRotationTime;
                 }
                 currentArm = data.craneArm.GetComponent<IClaneArm>();
                 // スタンダードクレーンの初期化処理
@@ -112,6 +111,12 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 var speedData = Array.Find(craneDatas, c => c.craneType == CraneType.Speed);
                 if (speedData != null)
                 {
+                    this.maxMoveX = speedData.craneData.maxMoveX;
+                    this.moveSpeed = speedData.craneData.moveSpeed;
+                    this.descendSpeed = speedData.craneData.descendSpeed;
+                    this.ascendTime = speedData.craneData.ascendTime;
+                    this.returnSpeed = speedData.craneData.returnSpeed;
+                    this.armRotationTime = speedData.craneData.armRotationTime;
                     // スピードクレーンのアームを有効化                    
                     speedData.craneArm.SetActive(true);
                 }
@@ -122,6 +127,12 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 var hammerData = Array.Find(craneDatas, c => c.craneType == CraneType.Hammer);
                 if (hammerData != null)
                 {
+                    this.maxMoveX = hammerData.craneData.maxMoveX;
+                    this.moveSpeed = hammerData.craneData.moveSpeed;
+                    this.descendSpeed = hammerData.craneData.descendSpeed;
+                    this.ascendTime = hammerData.craneData.ascendTime;
+                    this.returnSpeed = hammerData.craneData.returnSpeed;
+                    this.armRotationTime = hammerData.craneData.armRotationTime;
                     // ハンマークレーンのアームを有効化                    
                     hammerData.craneArm.SetActive(true);
                 }
@@ -132,6 +143,12 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 var bombData = Array.Find(craneDatas, c => c.craneType == CraneType.Bomb);
                 if (bombData != null)
                 {
+                    this.maxMoveX = bombData.craneData.maxMoveX;
+                    this.moveSpeed = bombData.craneData.moveSpeed;
+                    this.descendSpeed = bombData.craneData.descendSpeed;
+                    this.ascendTime = bombData.craneData.ascendTime;
+                    this.returnSpeed = bombData.craneData.returnSpeed;
+                    this.armRotationTime = bombData.craneData.armRotationTime;
                     // ボムクレーンのアームを有効化                    
                     bombData.craneArm.SetActive(true);
                 }
@@ -219,6 +236,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
 public class CraneArmData
 {
     public CraneType craneType;
+    public CraneDataObj craneData;
     public GameObject craneArm;
 }
 public enum CraneMoveType

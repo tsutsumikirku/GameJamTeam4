@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class BombCrane : MonoBehaviour, IClaneArm
@@ -15,6 +16,9 @@ public class BombCrane : MonoBehaviour, IClaneArm
     [SerializeField] private float fuseTime = 1.5f;
     [SerializeField] private float explosionForce = 15f;
     [SerializeField] private float explosionRadius = 3f;
+
+    [Header("クレーンのインターバル設定")]
+    [SerializeField] private float actionInterval = 3f; // アームアクションのインターバル時間
 
     private Coroutine bombRoutine;
     private GameObject currentBomb;
@@ -36,6 +40,12 @@ public class BombCrane : MonoBehaviour, IClaneArm
 
     public void OnArmRelease()
     {
+        OnArmReleaseAsync().Forget();
+    }
+    private async UniTask OnArmReleaseAsync()
+    {
+        await UniTask.Yield(); // 次のフレームまで待機
+        await UniTask.WaitForSeconds(actionInterval); // アクションインターバルを待機
         onArmReleaseEnd?.Invoke();
     }
 

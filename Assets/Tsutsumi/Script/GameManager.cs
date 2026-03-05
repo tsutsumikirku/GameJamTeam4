@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,12 +9,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int gameTimeLimit; // ゲームの制限時間を管理する変数
     public static GameManager Instance;
     // ゲームの状態を管理するプロパティ
-    public GameState CurrentGameState { get => currentGameState; private set => OnStateChange(value); }
+    public GameState CurrentGameState { get => currentGameState; set => OnStateChange(value); }
     private GameState currentGameState;
     private bool isGamePaused; // ゲームが一時停止しているかどうかを管理する変数
     private int playerOneScore; // プレイヤーのスコアを管理する変数
     private int playerTwoScore; // プレイヤーのスコアを管理する変数
+    public CraneType PlayerOneCraneType;
+    public CraneType PlayerTwoCraneType;
+    public InGameCharacter PlayerOneCharacter;
+    public InGameCharacter PlayerTwoCharacter;
     private IPauseResume[] pauseResumeObjects;
+    public bool isSingle = false;
     // ゲームのデータを管理する変数
     #endregion
 
@@ -44,7 +50,8 @@ public class GameManager : MonoBehaviour
     // インゲームのステートに変化した際に呼び出される関数
     private void OnInGame()
     {
-        
+        playerOneScore = 0;
+        playerTwoScore = 0;
     }
     // リザルトのステートに変化した際に呼び出される関数
     private void OnResult()
@@ -57,11 +64,19 @@ public class GameManager : MonoBehaviour
     // アイテムの管理に関するコードをここに追加
     public void PlayerOneItemGet(int score)
     {
-        
+        playerOneScore += score;
+        if (score > 0)
+        PlayerOneCharacter.Smile().Forget();
+        else 
+        PlayerOneCharacter.Sad().Forget();
     }
     public void PlayerTwoItemGet(int score)
     {
-        
+        playerTwoScore += score;
+        if (score > 0)
+        PlayerTwoCharacter.Smile().Forget();
+        else 
+        PlayerTwoCharacter.Sad().Forget();
     }
 
     #endregion
