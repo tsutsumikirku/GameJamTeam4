@@ -58,16 +58,23 @@ MonoBehaviour:
     rate: 3
   - prefab: {fileID: 5368231121148700822, guid: b411aae116bdd5a4b838074d74a30a26, type: 3}
     rate: 18
-  - prefab: {fileID: 336283321531588897, guid: fbc77f9c44243874c9545625c3e65a98, type: 3}
-    rate: 20
-  - prefab: {fileID: 336283321531588897, guid: fbc77f9c44243874c9545625c3e65a98, type: 3}
+  - prefab: {fileID: 2327716980830087007, guid: 120d28f996845854ba4459f1c5d921c1, type: 3}
+    rate: 10
+  - prefab: {fileID: 2856440382848591012, guid: b38f3e8d73821e14fab81138d35e82a8, type: 3}
+    rate: 10
+  - prefab: {fileID: 7979622608118212700, guid: 887e219c5009f464b808e014cad1046f, type: 3}
+    rate: 10
+  - prefab: {fileID: 7612186180114869305, guid: 5ef47f52b2cf75b46bc2fe94954e26b7, type: 3}
+    rate: 10
+  - prefab: {fileID: 5810162038842943204, guid: 9937bbfbdc45b9e419c8ea920ed70e35, type: 3}
+    rate: 10
+  - prefab: {fileID: 7612186180114869305, guid: 5ef47f52b2cf75b46bc2fe94954e26b7, type: 3}
     rate: 20
   spawnPoint: {fileID: 0}
   spawnTimes:
+  - 30
   - 60
   - 90
-  - 120
-  - 150
   rangeX: 5
   rangeY: 3
   audioSource: {fileID: 1840770826865546398}
