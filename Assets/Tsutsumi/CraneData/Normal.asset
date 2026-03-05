@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391daf5fb2f254a58a1b55fbf87976b2, type: 3}
   m_Name: Normal
   m_EditorClassIdentifier: 
-  maxMoveX: 40
+  maxMoveX: 8.5
   moveSpeed: 5
   descendSpeed: 3
   ascendTime: 2

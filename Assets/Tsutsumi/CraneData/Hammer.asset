@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391daf5fb2f254a58a1b55fbf87976b2, type: 3}
   m_Name: Hammer
   m_EditorClassIdentifier: 
-  maxMoveX: 40
-  moveSpeed: 5
-  descendSpeed: 3
-  ascendTime: 2
-  returnSpeed: 2
+  maxMoveX: 8.5
+  moveSpeed: 1.5
+  descendSpeed: 1.5
+  ascendTime: 1.5
+  returnSpeed: 1.5
   armRotationTime: 1
