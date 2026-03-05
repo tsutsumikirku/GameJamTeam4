@@ -16,6 +16,8 @@ public class Hanmmer : MonoBehaviour, IClaneArm
     private float power = 5f; // ハンマーの下降速度
     [SerializeField]
     private float hanmmerSpeed = 5f; // ハンマーの下降スピード
+    [SerializeField]
+    private float maxDescendDistance = 4f; // ハンマーの最大下降距離
     [SerializeField] 
     private float hannmerUpSpeed = 5f;
     public Action OnArmActionEnd { get; set; }
@@ -66,6 +68,10 @@ public class Hanmmer : MonoBehaviour, IClaneArm
         while (isArmClose)
         {
             transform.Translate(Vector2.down * hanmmerSpeed * Time.deltaTime); // ハンマーを下に動かす
+            if (Vector2.Distance(transform.localPosition, startPosition) >= maxDescendDistance)
+            {
+                isArmClose = false;
+            }
             await UniTask.Yield(); // 次のフレームまで待機
         }
 

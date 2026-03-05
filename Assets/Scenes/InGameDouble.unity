@@ -1449,8 +1449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameTimeLimit: 0
-  PlayerOneCraneType: 1
-  PlayerTwoCraneType: 2
+  PlayerOneCraneType: 3
+  PlayerTwoCraneType: 3
   PlayerOneCharacter: {fileID: 0}
   PlayerTwoCharacter: {fileID: 0}
   isSingle: 0
