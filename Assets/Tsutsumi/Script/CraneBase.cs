@@ -209,7 +209,15 @@ public class CraneBase : MonoBehaviour, IPauseResume
             float moveDirectionValue = (moveDirection == CraneMoveType.Right) ? 1f : -1f;
             transform.Translate(Vector3.right * moveDirectionValue * moveSpeed * Time.deltaTime);
             // 移動範囲を制限
-            float clampedX = Mathf.Clamp(transform.position.x, -maxMoveX, maxMoveX);
+            float clampedX;
+            if(moveDirection == CraneMoveType.Right)
+            {
+                clampedX = Mathf.Clamp(transform.position.x, startPosition.x, maxMoveX);
+            }
+            else
+            {
+                clampedX = Mathf.Clamp(transform.position.x, -maxMoveX, startPosition.x);
+            }
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
         }
     }

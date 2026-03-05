@@ -14,7 +14,7 @@ public class BombCrane : MonoBehaviour, IClaneArm
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private Transform dropPoint;
     [SerializeField] private float fuseTime = 1.5f;
-    [SerializeField] private float explosionForce = 15f;
+    [SerializeField] private float explosionForce = 50f; // 増強: デフォルト威力を上げる
     [SerializeField] private float explosionRadius = 3f;
 
     [Header("クレーンのインターバル設定")]
@@ -91,11 +91,13 @@ public class BombCrane : MonoBehaviour, IClaneArm
             }
 
             Vector2 direction = (targetRb.position - center).normalized;
-            direction = (direction + Vector2.up * 0.5f).normalized;
+            direction = (direction + Vector2.up * 0.8f).normalized; // 上方向の補正を強めに
 
             float distance = Vector2.Distance(targetRb.position, center);
-            float falloff = 1f - (distance / explosionRadius);
-            targetRb.AddForce(direction * explosionForce * falloff, ForceMode2D.Impulse);
+            float falloff = Mathf.Clamp01(1f - (distance / explosionRadius));
+            // エッジでの力をある程度確保しつつ、中心付近は強くする
+            float appliedMultiplier = Mathf.Lerp(0.6f, 1f, falloff);
+            targetRb.AddForce(direction * explosionForce * appliedMultiplier, ForceMode2D.Impulse);
         }
 
         Destroy(currentBomb);
