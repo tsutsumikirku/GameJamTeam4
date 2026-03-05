@@ -1449,7 +1449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameTimeLimit: 0
-  PlayerOneCraneType: 3
+  PlayerOneCraneType: 1
   PlayerTwoCraneType: 3
   PlayerOneCharacter: {fileID: 0}
   PlayerTwoCharacter: {fileID: 0}
@@ -3557,11 +3557,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 69692391996667369, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: maxDescendDistance
-      value: 9.63
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 580311670714395886, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 621627937547849471, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: actionKey
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 690830758898014131, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_IsActive
@@ -3570,6 +3574,18 @@ PrefabInstance:
     - target: {fileID: 1049848956743766671, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_Name
       value: Crane1P
+      objectReference: {fileID: 0}
+    - target: {fileID: 1608319533949794268, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: power
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1608319533949794268, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: hanmmerSpeed
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1608319533949794268, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: maxDescendDistance
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 1859172258165080294, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_LocalScale.x
@@ -3586,6 +3602,10 @@ PrefabInstance:
     - target: {fileID: 1859172258165080294, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868750507242543609, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: knockbackForce
+      value: -75
       objectReference: {fileID: 0}
     - target: {fileID: 2034742889239193675, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_LocalScale.x
@@ -3649,11 +3669,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3311138672763857966, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: maxDescendDistance
-      value: 9.09
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 3331679267590096398, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: fuseTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: explosionForce
+      value: 215
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: explosionRadius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7866408892475707106, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_Sprite
@@ -4751,8 +4783,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 7892555955530693858, guid: 0db429d6b8d72bc4792856172731537d, type: 3}
   dropPoint: {fileID: 7353861660221508411}
-  fuseTime: 1.5
-  explosionForce: 15
+  fuseTime: 2
+  explosionForce: 215
   explosionRadius: 3
   actionInterval: 3
 --- !u!4 &1757695407976259544
@@ -5692,7 +5724,7 @@ MonoBehaviour:
   leftArm: {fileID: 6825417152534993709}
   descendSpeed: 3
   ascendSpeed: 2.16
-  maxDescendDistance: 5
+  maxDescendDistance: 9.5
   leftOpenAngle: 40
   leftCloseAngle: 3
   rightOpenAngle: -40
@@ -6122,7 +6154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19ad32ef5cf448f5b30414ddd5b78f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackForce: 46
+  knockbackForce: 50
   knockbackUpForce: 2
   flyDirection: {x: 1, y: 0.5}
   IsActive: 0
@@ -6422,8 +6454,9 @@ MonoBehaviour:
   isRight: 1
   hannmerBom: {fileID: 7362281246311518756}
   rb: {fileID: 4366650257354292853}
-  power: 2
+  power: 3
   hanmmerSpeed: 5.5
+  maxDescendDistance: 5.5
   hannmerUpSpeed: 5
   maxHannmerAngle: 180
   knockbackForce: 10
@@ -7139,7 +7172,7 @@ MonoBehaviour:
   leftArm: {fileID: 3044525858920106220}
   descendSpeed: 3
   ascendSpeed: 2.16
-  maxDescendDistance: 5
+  maxDescendDistance: 9.5
   leftOpenAngle: 40
   leftCloseAngle: 3
   rightOpenAngle: -40

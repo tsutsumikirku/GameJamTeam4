@@ -85,6 +85,9 @@ public class BombCrane : MonoBehaviour, IClaneArm
 
         foreach (Collider2D hit in hits)
         {
+            if (hit.CompareTag("Player")) continue; // 追加
+            if (hit.transform.parent != null) continue; // 掴まれ中はスキップ
+
             if (!hit.TryGetComponent<Rigidbody2D>(out Rigidbody2D targetRb) || targetRb.isKinematic)
             {
                 continue;
