@@ -14,8 +14,11 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private Image goImage;
     [SerializeField] private InGameCharacter[] playerOneImage;
     [SerializeField] private InGameCharacter[] playerTwoImage;
+    [SerializeField] private Image GameEndImage;
+    [SerializeField] private SceneChanger sceneChanger;
     async UniTask Start()
     {
+        AudioManager.Instance.StopBGM();
         playerOneCrane.Inittialize(GameManager.Instance.PlayerOneCraneType);
         if(!GameManager.Instance.isSingle)
         playerTwoCrane.Inittialize(GameManager.Instance.PlayerTwoCraneType);
@@ -119,6 +122,21 @@ public class InGameManager : MonoBehaviour
         GameManager.Instance.CurrentGameState = GameState.InGame;
         playerOneCrane.GameStart();
         playerTwoCrane.GameStart();
+        TimeManager.instance.OnTimerEnd = () => {
+            playerOneCrane.GameEnd();
+            playerTwoCrane.GameEnd();
+            GameEnd().Forget();
+        };
+    }
+    private async UniTask GameEnd()
+    {
+        AudioManager.Instance.StopBGM();
+        GameEndImage.gameObject.SetActive(true);
+            Vector2 beforeScale = GameEndImage.transform.localScale;
+            GameEndImage.transform.localScale = Vector3.zero;
+            await GameEndImage.transform.DOScale(beforeScale, 0.5f).SetEase(Ease.OutBack).AsyncWaitForCompletion();
+            await UniTask.Delay(2000);
+            sceneChanger.OnSceneChange("Result");
     }
 
 }

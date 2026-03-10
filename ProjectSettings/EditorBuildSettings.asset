@@ -9,6 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Scenes/CharacterSelect.unity
+    guid: 2cd2858fa18fc46849864269acaa5927
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelect 1.unity
+    guid: 36573660b8bd0474bb6381ba928428d7
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelect2.unity
+    guid: 613232ef9e2c5414dac7d1f6fe5c1547
+  - enabled: 1
+    path: Assets/Scenes/InGameSingle.unity
+    guid: ed3ac7e3ebdeb451b9e98551f592c417
+  - enabled: 1
     path: Assets/Scenes/Infomation.unity
     guid: f35c4527e822f42409cfedf246a0f97f
   - enabled: 1

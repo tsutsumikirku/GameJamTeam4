@@ -11,7 +11,7 @@ public class TitleManager : MonoBehaviour
     private bool isMoviePlaying;
     void Start()
     {
-        
+        GameManager.Instance.CurrentGameState = GameState.OutGame;
     }
     void Update()
     {

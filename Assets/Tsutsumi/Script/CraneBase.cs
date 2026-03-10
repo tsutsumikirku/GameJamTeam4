@@ -60,6 +60,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 currentArm.OnArmActionEnd = () =>
                 {
                     Debug.Log("ArmActionEnd");
+                    if(craneState == CraneState.DontMove)return;
                     craneState = CraneState.Returning;
                 };
                 // クレーンがアームアクション状態になったときの処理
@@ -68,6 +69,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 // クレーンが戻り状態になったときの処理
                     transform.DOMove(startPosition, Vector2.Distance(transform.position, startPosition) / returnSpeed).SetEase(Ease.InOutSine).OnComplete(() =>
                     {
+                        if(craneState == CraneState.DontMove)return;
                         craneState = CraneState.ArmReleaseAction;
                     }).SetUpdate(UpdateType.Fixed); // ポーズ中も動くようにする
                 break;
@@ -76,6 +78,7 @@ public class CraneBase : MonoBehaviour, IPauseResume
                 currentArm.OnArmRelease();
                 currentArm.OnArmReleaseEnd = () =>
                 {
+                    if(craneState == CraneState.DontMove)return;
                     craneState = CraneState.Moving;
                 };
                 break;
@@ -160,6 +163,10 @@ public class CraneBase : MonoBehaviour, IPauseResume
     public void GameStart()
     {
         craneState = CraneState.Moving;
+    }
+    public void GameEnd()
+    {
+        craneState = CraneState.DontMove;
     }
     #endregion
 
@@ -254,10 +261,10 @@ public enum CraneMoveType
 }
 public enum CraneType
 {
-    Standard,
-    Speed,
-    Hammer,
-    Bomb
+    Standard = 0,
+    Speed = 1,
+    Hammer = 2,
+    Bomb = 3
 }
 public enum CraneState
 {

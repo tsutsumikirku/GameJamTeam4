@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,11 +11,12 @@ public class TimeManager : MonoBehaviour
     public float gameTime = 180f;
     float currentTime;
     bool isRunnning = false;
-    public event Action OnTimerEnd;
+    public Action OnTimerEnd;
 
     private void Awake()
     {
         instance = this;
+        timerText.gameObject.SetActive(false);
         timerText.text = gameTime.ToString();
     }
 
@@ -34,7 +36,8 @@ public class TimeManager : MonoBehaviour
     public void StartTimer()
     {
         currentTime = gameTime;
-        isRunnning=true;
+        isRunnning = true;
+        timerText.gameObject.SetActive(true);
     }
 
     public float GetTime()

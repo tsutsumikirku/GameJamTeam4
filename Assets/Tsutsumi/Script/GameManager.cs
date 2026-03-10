@@ -7,13 +7,16 @@ public class GameManager : MonoBehaviour
     #region 変数とプロパティの宣言
     // インスペクターから編集できる変数
     [SerializeField] private int gameTimeLimit; // ゲームの制限時間を管理する変数
+    [SerializeField] private AudioClip titleBGM;
+    [SerializeField] private AudioClip inGameBGM;
+    [SerializeField] private AudioClip resultBGM;
     public static GameManager Instance;
     // ゲームの状態を管理するプロパティ
     public GameState CurrentGameState { get => currentGameState; set => OnStateChange(value); }
     private GameState currentGameState;
     private bool isGamePaused; // ゲームが一時停止しているかどうかを管理する変数
-    private int playerOneScore; // プレイヤーのスコアを管理する変数
-    private int playerTwoScore; // プレイヤーのスコアを管理する変数
+    public int playerOneScore; // プレイヤーのスコアを管理する変数
+    public int playerTwoScore; // プレイヤーのスコアを管理する変数
     public CraneType PlayerOneCraneType;
     public CraneType PlayerTwoCraneType;
     public InGameCharacter PlayerOneCharacter;
@@ -45,18 +48,19 @@ public class GameManager : MonoBehaviour
     // アウトゲームのステートに変化した際に呼び出される関数
     private void OnOutGame()
     {
-        
+        AudioManager.Instance.PlayBGM(titleBGM);
     }
     // インゲームのステートに変化した際に呼び出される関数
     private void OnInGame()
     {
+        AudioManager.Instance.PlayBGM(inGameBGM);
         playerOneScore = 0;
         playerTwoScore = 0;
     }
     // リザルトのステートに変化した際に呼び出される関数
     private void OnResult()
     {
-        
+        AudioManager.Instance.PlayBGM(resultBGM);
     }
     #endregion
 
