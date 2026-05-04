@@ -45,7 +45,6 @@ public class BombCrane : MonoBehaviour, IClaneArm
     private async UniTask OnArmReleaseAsync()
     {
         await UniTask.Yield(); // 次のフレームまで待機
-        await UniTask.WaitForSeconds(actionInterval); // アクションインターバルを待機
         onArmReleaseEnd?.Invoke();
     }
 
