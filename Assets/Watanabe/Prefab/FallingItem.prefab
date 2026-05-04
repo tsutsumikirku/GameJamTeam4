@@ -72,9 +72,15 @@ MonoBehaviour:
     rate: 10
   spawnPoint: {fileID: 0}
   spawnTimes:
+  - 15
   - 30
+  - 45
   - 60
+  - 75
   - 90
+  - 110
+  - 110
+  - 14
   rangeX: 5
   rangeY: 3
   audioSource: {fileID: 1840770826865546398}

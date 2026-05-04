@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Hammer
   m_EditorClassIdentifier: 
   maxMoveX: 8.5
-  moveSpeed: 1.5
+  moveSpeed: 4
   descendSpeed: 1.5
   ascendTime: 1.5
-  returnSpeed: 1.5
+  returnSpeed: 4
   armRotationTime: 1

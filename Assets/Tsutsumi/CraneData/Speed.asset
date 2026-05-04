@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Speed
   m_EditorClassIdentifier: 
   maxMoveX: 8.5
-  moveSpeed: 7.5
-  descendSpeed: 3
-  ascendTime: 2
-  returnSpeed: 3
+  moveSpeed: 8
+  descendSpeed: 4
+  ascendTime: 4
+  returnSpeed: 8
   armRotationTime: 1

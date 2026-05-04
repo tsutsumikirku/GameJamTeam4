@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Bomb
   m_EditorClassIdentifier: 
   maxMoveX: 8.5
-  moveSpeed: 2.8
+  moveSpeed: 4
   descendSpeed: 3
   ascendTime: 2
-  returnSpeed: 2
+  returnSpeed: 4
   armRotationTime: 1
