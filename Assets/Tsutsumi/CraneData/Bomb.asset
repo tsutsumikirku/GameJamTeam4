@@ -17,4 +17,4 @@ MonoBehaviour:
   descendSpeed: 3
   ascendTime: 2
   returnSpeed: 4
-  armRotationTime: 1
+  armRotationTime: 0
