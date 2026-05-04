@@ -221,14 +221,14 @@ RectTransform:
   m_GameObject: {fileID: 99587618}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1013266430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 510.36, y: -378.11}
+  m_AnchoredPosition: {x: 0, y: -113}
   m_SizeDelta: {x: 899.2776, y: 202.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &99587620
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278249215
-  m_fontColor: {r: 1, g: 0.9021276, b: 0, a: 1}
+  m_fontColor: {r: 1, g: 0.90196085, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -366,7 +366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517, y: -104}
+  m_AnchoredPosition: {x: 0.000030517, y: -321}
   m_SizeDelta: {x: 592.2113, y: 190.1053}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &205015728
@@ -1651,14 +1651,14 @@ RectTransform:
   m_GameObject: {fileID: 1969952988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1013266430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -510.36, y: -378.11}
+  m_AnchoredPosition: {x: 0, y: 37}
   m_SizeDelta: {x: 899.2776, y: 202.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1969952990
@@ -1691,7 +1691,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278249215
-  m_fontColor: {r: 1, g: 0.9021276, b: 0, a: 1}
+  m_fontColor: {r: 1, g: 0.90196085, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

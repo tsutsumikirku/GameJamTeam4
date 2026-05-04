@@ -1427,7 +1427,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   EaseType: 1
   IsLoop: 0
-  changeScale: 1.2
+  changeScale: 0.9
 --- !u!114 &1036431263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2179,7 +2179,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   EaseType: 1
   IsLoop: 0
-  changeScale: 1.2
+  changeScale: 0.9
 --- !u!114 &2050020935
 MonoBehaviour:
   m_ObjectHideFlags: 0
