@@ -15,7 +15,7 @@ public class HannmerBom : MonoBehaviour
             if (rb != null)
             {
                 Vector2 knockbackDirection = flyDirection.normalized;
-                Vector2 knockback = knockbackDirection * knockbackForce * knockbackUpForce * Time.deltaTime;
+                Vector2 knockback = knockbackDirection * knockbackForce * knockbackUpForce;
                 rb.AddForce(knockback, ForceMode2D.Impulse);
             }
         }

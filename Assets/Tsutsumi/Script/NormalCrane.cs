@@ -108,6 +108,7 @@ public class NormalCrane : MonoBehaviour, IClaneArm
     {
         craneAreaCollider.isCrane = false;
         await OpenArmsAsync();
+        await UniTask.WaitForSeconds(0.1f); // アームが開くのを少し待つ
         await CloseArmsAsync();
         OnArmReleaseEnd?.Invoke();
     }
