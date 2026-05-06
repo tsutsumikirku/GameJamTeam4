@@ -21,8 +21,8 @@ public class ResultManager : MonoBehaviour
         int playerOneScore = GameManager.Instance.playerOneScore;
         int playerTwoScore = GameManager.Instance.playerTwoScore;
 
-        playerOneScoreText.text = "Player 1 Score: " + playerOneScore;
-        playerTwoScoreText.text = "Player 2 Score: " + playerTwoScore;
+        playerOneScoreText.text = "Player 1: " + playerOneScore;
+        playerTwoScoreText.text = "Player 2: " + playerTwoScore;
 
         // 勝敗の設定
         if (playerOneScore > playerTwoScore)
