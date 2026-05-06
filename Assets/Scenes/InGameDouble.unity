@@ -4192,7 +4192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: explosionForce
-      value: 215
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: explosionRadius
@@ -5424,7 +5424,7 @@ MonoBehaviour:
   bombEffectPrefab: {fileID: 1470892029627132261, guid: 956c24eab6be40f4ea3d0955dbfc27d5, type: 3}
   dropPoint: {fileID: 7353861660221508411}
   fuseTime: 2
-  explosionForce: 215
+  explosionForce: 300
   explosionRadius: 3
   actionInterval: 3
 --- !u!4 &1757695407976259544
