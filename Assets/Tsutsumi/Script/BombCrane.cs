@@ -12,6 +12,7 @@ public class BombCrane : MonoBehaviour, IClaneArm
 
     [Header("爆弾設定")]
     [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private GameObject bombEffectPrefab;
     [SerializeField] private Transform dropPoint;
     [SerializeField] private float fuseTime = 1.5f;
     [SerializeField] private float explosionForce = 50f; // 増強: デフォルト威力を上げる
@@ -78,7 +79,7 @@ public class BombCrane : MonoBehaviour, IClaneArm
         {
             return;
         }
-
+        Instantiate(bombEffectPrefab, currentBomb.transform.position, Quaternion.identity);
         Vector2 center = currentBomb.transform.position;
         Collider2D[] hits = Physics2D.OverlapCircleAll(center, explosionRadius);
 

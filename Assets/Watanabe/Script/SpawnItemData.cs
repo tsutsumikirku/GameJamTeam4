@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpawnItemData 
 {
-    [Header("ƒvƒŒƒnƒu“ü‚ê‚Ä")]
+    [Header("ãƒ—ãƒ¬ãƒãƒ–ã‚’è¨­å®š")]
     public GameObject prefab;
-    [Header("‚±‚Ì—ñ‚Å‚ÌoŒ»Šm—¦ ‚»‚Ì—ñ‚ÅŒv100‚É‚µ‚Ä")]
+    [Header("ã“ã®å‰²åˆã§ã®å‡ºç¾ç¢ºç‡ ã“ã®åˆ—ã§åˆè¨ˆ100ã«ã™ã‚‹")]
     public int rate;
 }

@@ -2152,7 +2152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &815484249
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4149,6 +4149,10 @@ PrefabInstance:
       propertyPath: explosionRadius
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7490905418474623688, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
+      propertyPath: bombEffectPrefab
+      value: 
+      objectReference: {fileID: 1470892029627132261, guid: 956c24eab6be40f4ea3d0955dbfc27d5, type: 3}
     - target: {fileID: 7866408892475707106, guid: 69ae62c43744c4750bcbfc5e21b4f5cc, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5368,6 +5372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 7892555955530693858, guid: 0db429d6b8d72bc4792856172731537d, type: 3}
+  bombEffectPrefab: {fileID: 1470892029627132261, guid: 956c24eab6be40f4ea3d0955dbfc27d5, type: 3}
   dropPoint: {fileID: 7353861660221508411}
   fuseTime: 2
   explosionForce: 215

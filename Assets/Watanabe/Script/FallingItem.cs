@@ -4,15 +4,13 @@ public class FallingItem : MonoBehaviour
 {
     public SpawnItemData[] items;
     public Transform spawnPoint;
-    [Header("”­¶ŠÔ")]
-    public float[] spawnTimes;
-    [Header("X”ÍˆÍ")]
+    [Header("ã‚¹ãƒãƒ¼ãƒ³é–“éš”")]
+    public float spawnInterval = 0.35f;
+    [Header("Xç¯„å›²")]
     public float rangeX = 5f;
     public float rangeY = 3f;
     float timer;
-    int currentTimeIndex = 0;
     int initialCount;
-    bool spawned = false;
     public AudioSource audioSource;
     public AudioClip spawnSE;
 
@@ -24,72 +22,65 @@ public class FallingItem : MonoBehaviour
     private void SetCount()
     {
         initialCount = GameObject.FindGameObjectsWithTag("Item").Length;
-        Debug.Log("‰Šú”z’u”F" + initialCount);
+        Debug.Log("åˆæœŸé…ç½®æ•°: " + initialCount);
     }
 
     private void Update()
     {
-        if (spawned) return;
-        if (spawnTimes == null  || spawnTimes.Length ==0) return;
+        if (initialCount <= 0) return;
         timer += Time.deltaTime;
-        if (currentTimeIndex < spawnTimes.Length &&
-            timer >= spawnTimes[currentTimeIndex])
+        if (timer >= spawnInterval)
         {
-            SpawnItems();
-            currentTimeIndex++;
-
-            if (currentTimeIndex >= spawnTimes.Length)
-                spawned = true;
+            timer = 0f;
+            SpawnOneItemIfNeeded();
         }
     }
 
-    void SpawnItems()
+    void SpawnOneItemIfNeeded()
     {
         int currentCount = GameObject.FindGameObjectsWithTag("Item").Length;
         int needSpawn = initialCount - currentCount;
-        Debug.Log("Œ»İ”F" + currentCount);
-        Debug.Log("•s‘«”F" + needSpawn);
         if (needSpawn <= 0) return;
-        for (int i = 0; i <needSpawn; i++)
-        {
-            GameObject prefab = GetRandomPrefab();
-            if (prefab == null) continue;
 
+        GameObject prefab = GetRandomPrefab();
+        if (prefab == null) return;
+
+        if (audioSource != null && spawnSE != null)
             audioSource.PlayOneShot(spawnSE);
-            Vector3 pos;
-            int tryCount = 80;
-            while (tryCount > 0)
+
+        Vector3 pos;
+        int tryCount = 80;
+        while (tryCount > 0)
+        {
+            pos = spawnPoint.position +
+                  new Vector3(
+                      Random.Range(-rangeX, rangeX),
+                      Random.Range(-rangeY, rangeY),
+                      0
+                  );
+
+            if (!IsOverlapping(pos, prefab))
             {
-                pos = spawnPoint.position +
-                      new Vector3(
-                          Random.Range(-rangeX, rangeX),
-                          Random.Range(-rangeY, rangeY),
-                          0
-                      );
-
-                if (!IsOverlapping(pos, prefab))
-                {
-                    Instantiate(prefab, pos, Quaternion.identity);
-                    break;
-                }
-
-                tryCount--;
+                Instantiate(prefab, pos, Quaternion.identity);
+                break;
             }
+
+            tryCount--;
         }
     }
 
     GameObject GetRandomPrefab()
     {
-        //ƒAƒCƒeƒ€‚Ìrate”‚ğ‘S•”‘«‚µ‚ÄÅ‘å’l‚ğŒvZ
+        // ã‚¢ã‚¤ãƒ†ãƒ ã® rate ã‚’åˆè¨ˆã—ã¦æŠ½é¸ç”¨ã®æœ€å¤§å€¤ã‚’è¨ˆç®—
         float total = 0;
         foreach (var item in items)
             total += item.rate;
 
-        //0`rate‚Ì‡Œv‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚É’l‚ğŒˆ‚ß‚é
+        // 0 ã‹ã‚‰ rate åˆè¨ˆã®ç¯„å›²ã§ãƒ©ãƒ³ãƒ€ãƒ å€¤ã‚’å–å¾—
         float rand = Random.Range(0, total);
         float current = 0;
 
-        //ƒAƒCƒeƒ€‚Ìrate‚ğ‘«‚µ‚Ä‚¢‚«Å‰‚Érand‚Ì”’l‚É‚È‚Á‚½‚ç‚»‚ê‚ğ•Ô‚·
+        // rate ã‚’åŠ ç®—ã—ã€rand ãŒå…¥ã£ãŸç¯„å›²ã® prefab ã‚’è¿”ã™
         foreach (var item in items)
         {
             current += item.rate;
@@ -97,7 +88,7 @@ public class FallingItem : MonoBehaviour
             if (rand <= current)
                 return item.prefab;
         }
-        //rate‚ğ‘«‚µ‚Ä‚¢‚Á‚Ä‚àÅ‘å’l‚É‚È‚ç‚È‚¢ê‡@”z—ñ‚Ì0”Ô–Ú‚ğ‘I‘ğ
+        // ä¸‡ä¸€ã©ã‚Œã«ã‚‚è©²å½“ã—ãªã„å ´åˆã¯å…ˆé ­ã‚’è¿”ã™
         return items[0].prefab;
     }
 

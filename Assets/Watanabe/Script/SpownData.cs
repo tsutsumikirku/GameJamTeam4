@@ -5,10 +5,10 @@ public class SpownData
 {
     public Transform point;
     public SpawnItemData[] items;
-    [Header("‚±‚Ì—ñ‚ÌoŒ»ŒÂ””ÍˆÍ")]
+    [Header("ã“ã®åˆ—ã®å‡ºç¾å€‹æ•°ç¯„å›²")]
     public int minCount = 10;
     public int maxCount = 15;
-    [Header("XY•ûŒü‚ÌL‚ª‚è")]
+    [Header("XYæ–¹å‘ã®ç¯„å›²")]
     public float rangeX = 10f;
     public float rangeY = 3f;
 }

@@ -11,7 +11,7 @@ public class ScoreArea : MonoBehaviour
         Item item = other.GetComponent<Item>();
         if (item == null) return;
 
-        // ���łɃA�C�e��������΃X�R�A�l�����ď���
+        // すでに別のアイテムがあればスコア加算後に削除
         if (currentItem != null && currentItem != item)
         {
             GetScore(currentItem);
